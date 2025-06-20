@@ -1,125 +1,236 @@
-﻿using KursProjectISP31.Model;
-using KursProjectISP31.Services;
-using KursProjectISP31.Utills;
+﻿using CarRentalSystem.ViewModel;
+using KursProjectISP31.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace KursProjectISP31.ViewModel
 {
-    public class EmployeeViewModel:ViewModelBase
+    public class EmployeeViewModel : BaseViewModel
     {
-        private EmployeeService empService;
+        private readonly ObservableCollection<Positions> _positions;
+        private Employees _currentEmployee = new Employees();
+        private Employees _selectedEmployee;
+        private string _filterText;
+        private ICollectionView _employeesView;
 
-        #region DisplayOperation
-        private ObservableCollection<Employee> empList;
-        public ObservableCollection<Employee> EmpList
-        {
-            get=>empList;
-            set { empList = value; OnPropertyChanged(nameof(EmpList)); }
-        }
-        private void LoadData()
-        {
-            EmpList = new ObservableCollection<Employee>(empService.GetAll());
-        }
-        #endregion
+        public ObservableCollection<Employees> Employees { get; }
 
-        private Employee currentEmployee;
-        public Employee CurrentEmployee
+        public Employees CurrentEmployee
         {
-            get { return currentEmployee; }
-            set { currentEmployee = value; OnPropertyChanged(nameof(CurrentEmployee)); }
+            get => _currentEmployee;
+            set
+            {
+                _currentEmployee = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEmployeeSelected));
+            }
         }
-        private string message;
-        public string Message
+
+        public Employees SelectedEmployee
         {
-            get { return message; }
-            set { message = value; OnPropertyChanged(nameof(Message)); }
+            get => _selectedEmployee;
+            set
+            {
+                _selectedEmployee = value;
+                CurrentEmployee = value != null ? new Employees
+                {
+                    EmployeeID = value.EmployeeID,
+                    FullName = value.FullName,
+                    Age = value.Age,
+                    Gender = value.Gender,
+                    Address = value.Address,
+                    Phone = value.Phone,
+                    PassportData = value.PassportData,
+                    PositionID = value.PositionID
+                } : new Employees();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEmployeeSelected));
+            }
         }
+
+        public bool IsEmployeeSelected => SelectedEmployee != null;
+
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                OnPropertyChanged();
+                _employeesView.Refresh();
+            }
+        }
+
+        public ObservableCollection<Positions> Positions => _positions;
+
+        public ICommand AddCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand ClearCommand { get; }
+        public ICommand GenerateReportCommand { get; }
+
         public EmployeeViewModel()
         {
-            empService = new EmployeeService();
+            Employees = new ObservableCollection<Employees>();
+            _positions = new ObservableCollection<Positions>();
+
+            InitializeCommands();
             LoadData();
-            CurrentEmployee = new Employee();
-            saveCommand = new RelayCommandSQL(Save);
-            updateCommand = new RelayCommandSQL(Update);
-            deleteCommand = new RelayCommandSQL(Delete);
+            SetupView();
         }
 
-        #region SaveOperation
-        private RelayCommandSQL saveCommand;
-        public RelayCommandSQL SaveCommand
+        private void InitializeCommands()
         {
-            get { return saveCommand; }
+            AddCommand = new RelayCommand(AddEmployee, CanAddEmployee);
+            SaveCommand = new RelayCommand(UpdateEmployee, CanUpdateEmployee);
+            DeleteCommand = new RelayCommand(DeleteEmployee, CanDeleteEmployee);
+            ClearCommand = new RelayCommand(ClearForm);
+            GenerateReportCommand = new RelayCommand(GenerateReport);
         }
-        public void Save()
-        {
-            try
-            {
-                var IsSaved = empService.Add(CurrentEmployee);
-                LoadData();
-                if (IsSaved)
-                    Message = "Служащий сохранен";
-                else
-                    Message = "Ошибка сохранения служащего";
-            }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-            }
-        }
-        #endregion
 
-        #region UpdateOperation
-        private RelayCommandSQL updateCommand;
-        public RelayCommandSQL UpdateCommand
+        private void LoadData()
         {
-            get { return updateCommand; }
-        }
-        public void Update()
-        {
-            try
+            // Загрузка сотрудников (в реальном приложении - из базы данных)
+            Employees.Add(new Employees
             {
-                var IsUpdated = empService.Update(CurrentEmployee);
-                LoadData();
-                if (IsUpdated)
-                    Message = "Служащий обновлен";
-                else
-                    Message = "Ошибка обновления служащего";
-            }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-            }
-        }
-        #endregion
+                EmployeeID = 1,
+                FullName = "Иванов Петр Сергеевич",
+                Age = 32,
+                Gender = "Мужской",
+                Address = "г. Москва, ул. Ленина, 15",
+                Phone = "+7 (495) 123-4567",
+                PassportData = "4510 654321",
+                PositionID = 1
+            });
 
-        #region DeleteOperation
-        private RelayCommandSQL deleteCommand;
-        public RelayCommandSQL DeleteCommand
-        {
-            get { return deleteCommand; }
+            // Загрузка должностей
+            _positions.Add(new Positions { PositionID = 1, PositionName = "Менеджер", Salary = 50000 });
+            _positions.Add(new Positions { PositionID = 2, PositionName = "Механик", Salary = 40000 });
+            _positions.Add(new Positions { PositionID = 3, PositionName = "Администратор", Salary = 45000 });
         }
-        public void Delete()
-        {
-            try
-            {
-                var IsDeleted = empService.Delete(CurrentEmployee.Id);
-                LoadData();
-                if (IsDeleted)
-                    Message = "Служащий удален";
-                else
-                    Message = "Ошибка удаления служащего";
-            }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-            }
-        }
-        #endregion
 
+        private void SetupView()
+        {
+            _employeesView = CollectionViewSource.GetDefaultView(Employees);
+            _employeesView.Filter = FilterEmployees;
+        }
+
+        private bool FilterEmployees(object obj)
+        {
+            if (string.IsNullOrWhiteSpace(FilterText)) return true;
+
+            if (obj is Employees employee)
+            {
+                return employee.FullName.Contains(FilterText, StringComparison.OrdinalIgnoreCase) ||
+                       employee.Phone.Contains(FilterText) ||
+                       employee.PassportData.Contains(FilterText);
+            }
+            return false;
+        }
+
+        private void AddEmployee()
+        {
+            var newEmployee = new Employees
+            {
+                FullName = CurrentEmployee.FullName,
+                Age = CurrentEmployee.Age,
+                Gender = CurrentEmployee.Gender,
+                Address = CurrentEmployee.Address,
+                Phone = CurrentEmployee.Phone,
+                PassportData = CurrentEmployee.PassportData,
+                PositionID = CurrentEmployee.PositionID
+            };
+
+            // В реальном приложении: сохранение в базу данных
+            newEmployee.EmployeeID = Employees.Count > 0 ? Employees.Max(e => e.EmployeeID) + 1 : 1;
+            Employees.Add(newEmployee);
+
+            ClearForm();
+        }
+
+        private void UpdateEmployee()
+        {
+            if (SelectedEmployee != null)
+            {
+                SelectedEmployee.FullName = CurrentEmployee.FullName;
+                SelectedEmployee.Age = CurrentEmployee.Age;
+                SelectedEmployee.Gender = CurrentEmployee.Gender;
+                SelectedEmployee.Address = CurrentEmployee.Address;
+                SelectedEmployee.Phone = CurrentEmployee.Phone;
+                SelectedEmployee.PassportData = CurrentEmployee.PassportData;
+                SelectedEmployee.PositionID = CurrentEmployee.PositionID;
+
+                // В реальном приложении: обновление в базе данных
+
+                // Обновляем отображение
+                var index = Employees.IndexOf(SelectedEmployee);
+                Employees[index] = SelectedEmployee;
+            }
+        }
+
+        private void DeleteEmployee()
+        {
+            if (SelectedEmployee != null)
+            {
+                // В реальном приложении: удаление из базы данных
+                Employees.Remove(SelectedEmployee);
+                ClearForm();
+            }
+        }
+
+        private void ClearForm()
+        {
+            CurrentEmployee = new Employees();
+            SelectedEmployee = null;
+        }
+
+        private void GenerateReport()
+        {
+            // Логика генерации отчета по сотрудникам
+            // Можно реализовать через Microsoft Reporting или другой механизм отчетов
+        }
+
+        private bool CanAddEmployee()
+        {
+            return !string.IsNullOrWhiteSpace(CurrentEmployee.FullName) &&
+                   !string.IsNullOrWhiteSpace(CurrentEmployee.PassportData) &&
+                   CurrentEmployee.PositionID > 0;
+        }
+
+        private bool CanUpdateEmployee()
+        {
+            return SelectedEmployee != null && CanAddEmployee();
+        }
+
+        private bool CanDeleteEmployee()
+        {
+            return SelectedEmployee != null;
+        }
+
+        public class RelayCommand : ICommand
+        {
+            private readonly Action _execute;
+            private readonly Func<bool> _canExecute;
+
+            public event EventHandler CanExecuteChanged
+            {
+                add => CommandManager.RequerySuggested += value;
+                remove => CommandManager.RequerySuggested -= value;
+            }
+
+            public RelayCommand(Action execute, Func<bool> canExecute = null)
+            {
+                _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+                _canExecute = canExecute;
+            }
+
+            public bool CanExecute(object parameter) => _canExecute?.Invoke() ?? true;
+
+            public void Execute(object parameter) => _execute();
+        }
     }
 }

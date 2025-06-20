@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="CarRentalSystem.View.BrandView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:CarRentalSystem.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800">
+
+    <UserControl.DataContext>
+        <vm:BrandViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Список брендов -->
+        <StackPanel Grid.Column="0" Margin="0 0 10 0">
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Бренды" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="10 0 0 0" Width="150" 
+                         ToolTip="Фильтр по названию, описанию или характеристикам"/>
+            </StackPanel>
+
+            <ListView ItemsSource="{Binding BrandsView}" 
+                      SelectedItem="{Binding SelectedBrand}"
+                      Height="300">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding BrandName}" Width="150"/>
+                        <GridViewColumn Header="Описание" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+
+        <!-- Форма редактирования -->
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Редактирование бренда" FontWeight="Bold" Margin="0 0 0 10"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Название бренда -->
+                <TextBlock Text="Название:" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding CurrentBrand.BrandName, UpdateSourceTrigger=PropertyChanged}" 
+                         Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                <!-- Технические характеристики -->
+                <TextBlock Text="Тех. характеристики:" Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Top"/>
+                <TextBox Text="{Binding CurrentBrand.TechnicalSpecs}" 
+                         Grid.Row="1" Grid.Column="1" Margin="5"
+                         AcceptsReturn="True" TextWrapping="Wrap" Height="60"/>
+
+                <!-- Описание -->
+                <TextBlock Text="Описание:" Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Top"/>
+                <TextBox Text="{Binding CurrentBrand.Description}" 
+                         Grid.Row="2" Grid.Column="1" Margin="5"
+                         AcceptsReturn="True" TextWrapping="Wrap" Height="80"/>
+            </Grid>
+
+            <!-- Кнопки управления -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+                <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
+                <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Margin="5"
+                        IsEnabled="{Binding IsBrandSelected}"/>
+                <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5"
+                        IsEnabled="{Binding IsBrandSelected}"/>
+                <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100" Margin="5"/>
+                <Button Content="Каталог" Command="{Binding GenerateCatalogCommand}" Width="100" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
