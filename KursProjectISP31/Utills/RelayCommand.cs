@@ -4,25 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KursProjectISP31.Utills;
 
 namespace KursProjectISP31.Utills
 {
-    public class RelayCommand:ICommand
+    public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool> _canExecute;
+        private readonly Action _execute;
 
-        public event EventHandler CanExecuteChanged
+        public RelayCommand(Action execute)
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         }
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-        public void Execute(object parameter) => _execute(parameter);
+
+        public bool CanExecute(object parameter) => true;
+
+        public void Execute(object parameter) => _execute();
+
+        public event EventHandler CanExecuteChanged;
     }
 }

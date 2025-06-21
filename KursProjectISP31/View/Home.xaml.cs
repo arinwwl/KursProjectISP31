@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KursProjectISP31.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +16,14 @@ using System.Windows.Shapes;
 namespace KursProjectISP31.View
 {
     /// <summary>
-    /// Логика взаимодействия для ClientView.xaml
+    /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class ClientView : UserControl
+    public partial class Home : UserControl
     {
-        public ClientView()
+        public Home()
         {
             InitializeComponent();
+            DataContext = new HomeViewModel(); // Установка контекста
         }
     }
 }

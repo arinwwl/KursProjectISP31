@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace KursProjectISP31.View
 {
     /// <summary>
-    /// Логика взаимодействия для ClientView.xaml
+    /// Логика взаимодействия для CarsView.xaml
     /// </summary>
-    public partial class ClientView : UserControl
+    public partial class CarsView : UserControl
     {
-        public ClientView()
+        public CarsView()
         {
             InitializeComponent();
         }

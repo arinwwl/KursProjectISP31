@@ -16,12 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\carrental.jpg" />
     <None Remove="Assets\home_page.png" />
     <None Remove="Assets\img_customer.png" />
     <None Remove="Assets\img_home.png" />
     <None Remove="Assets\img_order.png" />
     <None Remove="Assets\shutdown_def.png" />
     <None Remove="Assets\shutdown_mo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\carrental.jpg" />
   </ItemGroup>
 
   <ItemGroup>

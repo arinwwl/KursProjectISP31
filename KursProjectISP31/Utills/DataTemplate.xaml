@@ -2,13 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:KursProjectISP31.ViewModel"
                     xmlns:view="clr-namespace:KursProjectISP31.View">
-    <DataTemplate DataType="{x:Type vm:HomeViewModel}">
-        <view:Home/>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:EmployeeViewModel}">
-        <view:EmployerView/>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:OrderViewModel}">
-        <view:OrderView/>
-    </DataTemplate>
+  
+    
 </ResourceDictionary>

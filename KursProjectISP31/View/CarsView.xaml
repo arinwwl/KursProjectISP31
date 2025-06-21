@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="KursProjectISP31.View.ClientView"
+﻿<UserControl x:Class="KursProjectISP31.View.CarsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#FF212529">
     <Grid>
-        <TextBlock Text="Это страница КЛИЕНТОВ" 
+        <TextBlock Text="Это страница АВТОМОБИЛЕЙ" 
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Foreground="White"
