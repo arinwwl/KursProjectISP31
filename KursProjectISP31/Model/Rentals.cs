@@ -48,25 +48,11 @@ namespace KursProjectISP31.Model
             set { clientID = value; OnPropertyChanged(nameof(ClientID)); }
         }
 
-        private int? service1ID;
-        public int? Service1ID
+        private string? services;
+        public string? Services
         {
-            get => service1ID;
-            set { service1ID = value; OnPropertyChanged(nameof(Service1ID)); }
-        }
-
-        private int? service2ID;
-        public int? Service2ID
-        {
-            get => service2ID;
-            set { service2ID = value; OnPropertyChanged(nameof(Service2ID)); }
-        }
-
-        private int? service3ID;
-        public int? Service3ID
-        {
-            get => service3ID;
-            set { service3ID = value; OnPropertyChanged(nameof(Service3ID)); }
+            get => services;
+            set { Services = value; OnPropertyChanged(nameof(Services)); }
         }
 
         private decimal rentalPrice;

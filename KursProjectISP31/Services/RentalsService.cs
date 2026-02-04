@@ -34,9 +34,8 @@ namespace KursProjectISP31.Services
 
                 // Необязательные параметры (могут быть NULL)
                 objSqlCommand.Parameters.AddWithValue("@ReturnDate", obj.ReturnDate == default(DateTime) ? (object)DBNull.Value : obj.ReturnDate);
-                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Service1ID ?? (object)DBNull.Value);
-                objSqlCommand.Parameters.AddWithValue("@Service2ID", obj.Service2ID ?? (object)DBNull.Value);
-                objSqlCommand.Parameters.AddWithValue("@Service3ID", obj.Service3ID ?? (object)DBNull.Value);
+                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Services ?? (object)DBNull.Value);
+                
 
                 objSqlconnection.Open();
                 isAdded = objSqlCommand.ExecuteNonQuery() > 0;
@@ -79,9 +78,8 @@ namespace KursProjectISP31.Services
 
                 // Необязательные параметры
                 objSqlCommand.Parameters.AddWithValue("@ReturnDate", obj.ReturnDate == default(DateTime) ? (object)DBNull.Value : obj.ReturnDate);
-                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Service1ID ?? (object)DBNull.Value);
-                objSqlCommand.Parameters.AddWithValue("@Service2ID", obj.Service2ID ?? (object)DBNull.Value);
-                objSqlCommand.Parameters.AddWithValue("@Service3ID", obj.Service3ID ?? (object)DBNull.Value);
+                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Services ?? (object)DBNull.Value);
+               
 
                 objSqlconnection.Open();
                 isUpdated = objSqlCommand.ExecuteNonQuery() > 0;
@@ -121,9 +119,8 @@ namespace KursProjectISP31.Services
                             ReturnDate = reader.IsDBNull(reader.GetOrdinal("ReturnDate")) ? default : reader.GetDateTime(reader.GetOrdinal("ReturnDate")),
                             CarID = reader.GetInt32(reader.GetOrdinal("CarID")),
                             ClientID = reader.GetInt32(reader.GetOrdinal("ClientID")),
-                            Service1ID = reader.IsDBNull(reader.GetOrdinal("Service1ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service1ID")),
-                            Service2ID = reader.IsDBNull(reader.GetOrdinal("Service2ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service2ID")),
-                            Service3ID = reader.IsDBNull(reader.GetOrdinal("Service3ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service3ID")),
+                            Services = reader.IsDBNull(reader.GetOrdinal("Services")) ? (string?)null : reader.GetString(reader.GetOrdinal("Services")),
+                            
                             RentalPrice = reader.GetDecimal(reader.GetOrdinal("RentalPrice")),
                             IsPaid = reader.GetBoolean(reader.GetOrdinal("IsPaid")),
                             EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID"))
@@ -192,9 +189,7 @@ namespace KursProjectISP31.Services
                             ReturnDate = reader.IsDBNull(reader.GetOrdinal("ReturnDate")) ? default : reader.GetDateTime(reader.GetOrdinal("ReturnDate")),
                             CarID = reader.GetInt32(reader.GetOrdinal("CarID")),
                             ClientID = reader.GetInt32(reader.GetOrdinal("ClientID")),
-                            Service1ID = reader.IsDBNull(reader.GetOrdinal("Service1ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service1ID")),
-                            Service2ID = reader.IsDBNull(reader.GetOrdinal("Service2ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service2ID")),
-                            Service3ID = reader.IsDBNull(reader.GetOrdinal("Service3ID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Service3ID")),
+                            Services = reader.IsDBNull(reader.GetOrdinal("Services")) ? (string?)null : reader.GetString(reader.GetOrdinal("Service1ID")),
                             RentalPrice = reader.GetDecimal(reader.GetOrdinal("RentalPrice")),
                             IsPaid = reader.GetBoolean(reader.GetOrdinal("IsPaid")),
                             EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID"))

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace KursProjectISP31.Services
 {
-    public class ClientsService : BaseService<Clients>
+    public class ClientsService : BaseService<Client>
     {
         public ClientsService() : base()
         {
         }
 
-        public override bool Add(Clients obj)
+        public override bool Add(Client obj)
         {
             bool IsAdded = false;
             try
@@ -67,9 +67,9 @@ namespace KursProjectISP31.Services
             return IsDeleted;
         }
 
-        public override List<Clients> GetAll()
+        public override List<Client> GetAll()
         {
-            List<Clients> list = new List<Clients>();
+            List<Client> list = new List<Client>();
             try
             {
                 objSqlCommand.Parameters.Clear();
@@ -78,10 +78,10 @@ namespace KursProjectISP31.Services
                 var ObjSqlDataReader = objSqlCommand.ExecuteReader();
                 if (ObjSqlDataReader.HasRows)
                 {
-                    Clients objClient = null;
+                    Client objClient = null;
                     while (ObjSqlDataReader.Read())
                     {
-                        objClient = new Clients();
+                        objClient = new Client();
                         objClient.ClientID = ObjSqlDataReader.GetInt32(0);
                         objClient.FullName = ObjSqlDataReader.GetString(1);
                         objClient.Gender = ObjSqlDataReader.GetString(2);
@@ -105,7 +105,7 @@ namespace KursProjectISP31.Services
             return list;
         }
 
-        public override bool Update(Clients obj)
+        public override bool Update(Client obj)
         {
             bool IsUpdated = false;
             try

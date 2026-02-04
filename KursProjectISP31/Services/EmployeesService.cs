@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace KursProjectISP31.Services
 {
-    public class EmployeesService : BaseService<Employees>
+    public class EmployeeService : BaseService<Employee>
     {
-        public EmployeesService() : base()
+        public EmployeeService() : base()
         {
         }
 
-        public override bool Add(Employees obj)
+        public override bool Add(Employee obj)
         {
             bool IsAdded = false;
 
@@ -76,9 +76,9 @@ namespace KursProjectISP31.Services
             return IsDeleted;
         }
 
-        public override List<Employees> GetAll()
+        public override List<Employee> GetAll()
         {
-            List<Employees> employees = new List<Employees>();
+            List<Employee> employees = new List<Employee>();
             try
             {
                 objSqlCommand.Parameters.Clear();
@@ -91,7 +91,7 @@ namespace KursProjectISP31.Services
                     {
                         while (reader.Read())
                         {
-                            var employee = new Employees
+                            var employee = new Employee
                             {
                                 EmployeeID = reader.GetInt32(0),
                                 FullName = reader.GetString(1),
@@ -118,7 +118,7 @@ namespace KursProjectISP31.Services
             return employees;
         }
 
-        public override bool Update(Employees obj)
+        public override bool Update(Employee obj)
         {
             bool IsUpdated = false;
 
@@ -158,9 +158,9 @@ namespace KursProjectISP31.Services
         }
 
         // Дополнительный метод для поиска сотрудников по ФИО
-        public List<Employees> SearchByName(string name)
+        public List<Employee> SearchByName(string name)
         {
-            List<Employees> employees = new List<Employees>();
+            List<Employee> employees = new List<Employee>();
             try
             {
                 objSqlCommand.Parameters.Clear();
@@ -174,7 +174,7 @@ namespace KursProjectISP31.Services
                     {
                         while (reader.Read())
                         {
-                            employees.Add(new Employees
+                            employees.Add(new Employee
                             {
                                 EmployeeID = reader.GetInt32(0),
                                 FullName = reader.GetString(1),

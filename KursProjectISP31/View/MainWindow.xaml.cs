@@ -17,8 +17,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        this.DataContext = new NavigationViewModel();
-        Debug.WriteLine($"DataContext is {(this.DataContext == null ? "NULL" : "set")}");
     }
 
     private void CloseApp_Click(object sender, RoutedEventArgs e)

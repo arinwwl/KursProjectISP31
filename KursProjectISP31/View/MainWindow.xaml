@@ -14,11 +14,76 @@
         WindowStyle="None"
         Background="Transparent">
 
+    <!-- DataContext -->
     <Window.DataContext>
         <vm:NavigationViewModel/>
     </Window.DataContext>
 
+    <!-- Resources -->
+    <Window.Resources>
+        <!-- Шаблон для ClientsViewModel -->
+        <DataTemplate DataType="{x:Type vm:ClientsViewModel}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
+                <TextBlock Text="Клиенты" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding Clients}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID клиента" Binding="{Binding ClientID}" Width="80"/>
+                        <DataGridTextColumn Header="Полное имя" Binding="{Binding FullName}" Width="200"/>
+                        <DataGridTextColumn Header="Пол" Binding="{Binding Gender}" Width="80"/>
+                        <DataGridTextColumn Header="Дата рождения" 
+                                            Binding="{Binding BirthDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                            Width="100"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="250"/>
+                        <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="120"/>
+                        <DataGridTextColumn Header="Паспортные данные" Binding="{Binding PassportData}" Width="150"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:EmployeesViewModel}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Сотрудники" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Employees}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeID}" Width="100"/>
+                        <DataGridTextColumn Header="Полное имя" Binding="{Binding FullName}" Width="200"/>
+                        <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" Width="70"/>
+                        <DataGridTextColumn Header="Пол" Binding="{Binding Gender}" Width="80"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="250"/>
+                        <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="120"/>
+                        <DataGridTextColumn Header="Паспортные данные" Binding="{Binding PassportData}" Width="150"/>
+                        <DataGridTextColumn Header="ID должности" Binding="{Binding PositionID}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+        
+    </Window.Resources>
+
+    <!-- Основной макет -->
     <Grid>
         <Border Background="#212529" CornerRadius="20" />
 
@@ -46,61 +111,58 @@
                     </Menu:Btn>
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-          Command="{Binding ClientsCommand}">
+                              Command="{Binding ClientsCommand}">
                         <Grid>
                             <Image Source="/Assets/img_customer.png" 
-               Style="{StaticResource Image_Style}" />
+                                   Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Клиенты" 
-                   Style="{StaticResource Text_Style}" />
+                                       Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
                     <!-- Employees Button -->
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-          Command="{Binding EmployeesCommand}">
+                              Command="{Binding EmployeesCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_employee.png"
-               Style="{StaticResource Image_Style}" />
+                            <Image Source="/Assets/img_home.png" 
+                                   Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Сотрудники" 
-                   Style="{StaticResource Text_Style}" />
+                                       Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
-
                     <!-- Cars Button -->
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-          Command="{Binding CarsCommand}">
+                              Command="{Binding CarsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_car.png" 
-               Style="{StaticResource Image_Style}" />
+                            <Image Source="/Assets/img_home.png" 
+                                   Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Автомобили" 
-                   Style="{StaticResource Text_Style}" />
+                                       Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
                     <!-- CarBrands Button -->
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-          Command="{Binding CarBrandsCommand}">
+                              Command="{Binding CarBrandsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_brand.png" 
-               Style="{StaticResource Image_Style}" />
+                            <Image Source="/Assets/img_home.png" 
+                                   Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Бренды" 
-                   Style="{StaticResource Text_Style}" />
+                                       Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
 
                     <!-- Rentals Button -->
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-          Command="{Binding RentalsCommand}">
+                              Command="{Binding RentalsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_rental.png" 
-               Style="{StaticResource Image_Style}" />
+                            <Image Source="/Assets/img_home.png" 
+                                   Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Аренды" 
-                   Style="{StaticResource Text_Style}" />
+                                       Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
-
-
                 </StackPanel>
             </Grid>
 
@@ -110,5 +172,4 @@
             </Grid>
         </Grid>
     </Grid>
-
 </Window>

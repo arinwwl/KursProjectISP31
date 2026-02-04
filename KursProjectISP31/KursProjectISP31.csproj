@@ -42,4 +42,10 @@
     <Resource Include="Assets\shutdown_mo.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="ViewModel\HomeViewModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 </Project>

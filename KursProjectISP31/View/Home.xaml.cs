@@ -15,15 +15,13 @@ using System.Windows.Shapes;
 
 namespace KursProjectISP31.View
 {
-    /// <summary>
-    /// Логика взаимодействия для Window1.xaml
-    /// </summary>
+  
     public partial class Home : UserControl
     {
         public Home()
         {
             InitializeComponent();
-            DataContext = new HomeViewModel(); // Установка контекста
+            
         }
     }
 }

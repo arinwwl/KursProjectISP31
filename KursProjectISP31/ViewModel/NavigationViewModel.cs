@@ -6,14 +6,14 @@ namespace KursProjectISP31.ViewModel
 {
     public class NavigationViewModel : ViewModelBase
     {
-        private object _currentView;
-        public object CurrentView
+        private ViewModelBase _currentView;
+        public ViewModelBase CurrentView
         {
             get => _currentView;
             set
             {
                 _currentView = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentView));
                 Debug.WriteLine($"Переключено на: {_currentView?.GetType().Name}");
             }
         }
@@ -34,11 +34,11 @@ namespace KursProjectISP31.ViewModel
             CarBrandsCommand = new RelayCommand(() => ShowView(new CarBrandsViewModel()));
             RentalsCommand = new RelayCommand(() => ShowView(new RentalsViewModel()));
 
-            // Начальная страница
-            ShowView(new HomeViewModel());
+            // Стартовая страница
+            CurrentView = new HomeViewModel();
         }
 
-        private void ShowView(object viewModel)
+        private void ShowView(ViewModelBase viewModel)
         {
             CurrentView = viewModel;
             Debug.WriteLine($"Показан ViewModel: {viewModel.GetType().Name}");
