@@ -80,7 +80,43 @@
                 </DataGrid>
             </Grid>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type vm:CarsViewModel}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Автомобили" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Cars}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID автомобиля" Binding="{Binding CarID}" Width="100"/>
+                        <DataGridTextColumn Header="ID бренда" Binding="{Binding BrandID}" Width="90"/>
+                        <DataGridTextColumn Header="Рег. номер" Binding="{Binding RegistrationNumber}" Width="100"/>
+                        <DataGridTextColumn Header="Номер двигателя" Binding="{Binding EngineNumber}" Width="120"/>
+                        <DataGridTextColumn Header="VIN" Binding="{Binding VIN}" Width="140"/>
+                        <DataGridTextColumn Header="Год выпуска" Binding="{Binding ManufactureYear}" Width="90"/>
+                        <DataGridTextColumn Header="Пробег" Binding="{Binding Mileage}" Width="100"/>
+                        <DataGridTextColumn Header="Цена авто" Binding="{Binding CarPrice, StringFormat={}{0:C}}" Width="100"/>
+                        <DataGridTextColumn Header="Стоимость аренды/день" Binding="{Binding DailyRentalPrice, StringFormat={}{0:C}}" Width="140"/>
+                        <DataGridTextColumn Header="Дата последней инспекции" 
+                                    Binding="{Binding LastInspectionDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                    Width="130"/>
+                        <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeID}" Width="100"/>
+                        <DataGridTextColumn Header="Примечания" Binding="{Binding SpecialNotes}" Width="200"/>
+                        <DataGridCheckBoxColumn Header="Возвращён" Binding="{Binding IsReturned}" Width="80"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+
     </Window.Resources>
 
     <!-- Основной макет -->
