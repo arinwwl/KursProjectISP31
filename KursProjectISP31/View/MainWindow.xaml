@@ -226,7 +226,7 @@
                     <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding EmployeesCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_home.png" 
+                            <Image Source="/Assets/employee.png" 
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Сотрудники" 
                                        Style="{StaticResource Text_Style}" />
@@ -237,7 +237,7 @@
                     <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding CarsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_home.png" 
+                            <Image Source="/Assets/car.png" 
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Автомобили" 
                                        Style="{StaticResource Text_Style}" />
@@ -248,7 +248,7 @@
                     <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding CarBrandsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_home.png" 
+                            <Image Source="/Assets/brands.png" 
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Бренды" 
                                        Style="{StaticResource Text_Style}" />
@@ -259,7 +259,7 @@
                     <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding RentalsCommand}">
                         <Grid>
-                            <Image Source="/Assets/img_home.png" 
+                            <Image Source="/Assets/img_order.png" 
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Аренды" 
                                        Style="{StaticResource Text_Style}" />
