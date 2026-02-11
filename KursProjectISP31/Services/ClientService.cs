@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace KursProjectISP31.Services
 {
-    public class ClientsService : BaseService<Client>
+    public class ClientService : BaseService<Client>
     {
-        public ClientsService() : base()
+        public ClientService() : base()
         {
         }
 

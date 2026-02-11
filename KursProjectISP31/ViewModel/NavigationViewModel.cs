@@ -24,6 +24,7 @@ namespace KursProjectISP31.ViewModel
         public ICommand CarsCommand { get; }
         public ICommand CarBrandsCommand { get; }
         public ICommand RentalsCommand { get; }
+        public ICommand AddRentalsCommand { get; }
 
         public NavigationViewModel()
         {
@@ -33,6 +34,7 @@ namespace KursProjectISP31.ViewModel
             CarsCommand = new RelayCommand(() => ShowView(new CarsViewModel()));
             CarBrandsCommand = new RelayCommand(() => ShowView(new CarBrandsViewModel()));
             RentalsCommand = new RelayCommand(() => ShowView(new RentalsViewModel()));
+            AddRentalsCommand = new RelayCommand(() => CurrentView = new AddRentalsViewModel());
 
 
             // Стартовая страница

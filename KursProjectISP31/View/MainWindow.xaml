@@ -183,6 +183,114 @@
             </Grid>
         </DataTemplate>
 
+        <!-- Шаблон для AddRentalsViewModel --><!--
+        <DataTemplate DataType="{x:Type vm:AddRentalsViewModel}">
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                --><!-- Левая панель: выбор -->
+                <!-- Левая панель: выбор --><!--
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="Администратор" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Клиент" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Clients}" 
+              SelectedItem="{Binding SelectedClient}"
+              DisplayMemberPath="FullName"
+              Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Автомобиль" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Cars}" 
+              SelectedItem="{Binding SelectedCar}"
+              DisplayMemberPath="RegistrationNumber"
+              Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Дата выдачи" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding IssueDate}" 
+                Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Дата возврата" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding ReturnDate}" 
+                Margin="0,0,0,20"/>
+
+                    <Button Content="Добавить" 
+            Command="{Binding AddCommand}"
+            Style="{StaticResource BtnStyle}"
+            Margin="0,0,0,10"/>
+
+                    <Button Content="Отмена" 
+            Command="{Binding CancelCommand}"
+            Style="{StaticResource BtnStyle}"/>
+                </StackPanel>
+
+                --><!-- Правая панель --><!--
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    --><!-- Верхний блок: выбранные данные --><!--
+                    <Border BorderBrush="#495057" BorderThickness="1" CornerRadius="5" Padding="12" Margin="0,0,0,15">
+                        <TextBlock Text="{Binding Draft.Summary}" 
+                           FontSize="14" 
+                           TextWrapping="Wrap"
+                           Foreground="White"/>
+                    </Border>
+
+                    --><!-- Нижний блок: заглушка --><!--
+                    <Border Grid.Row="1" BorderBrush="#495057" BorderThickness="1" CornerRadius="5" Padding="12">
+                        <TextBlock Text="Здесь можно будет отображать список всех аренд после сохранения" 
+                           Foreground="White" FontStyle="Italic"/>
+                    </Border>
+                </Grid>
+            </Grid>
+        </DataTemplate>-->
+
+        <DataTemplate DataType="{x:Type vm:AddRentalsViewModel}">
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Левая панель -->
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="Клиент" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Clients}" 
+                      SelectedItem="{Binding SelectedClient}"
+                      DisplayMemberPath="FullName"
+                      Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Автомобиль" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding Cars}" 
+                      SelectedItem="{Binding SelectedCar}"
+                      DisplayMemberPath="RegistrationNumber"
+                      Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Дата выдачи" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding IssueDate}" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Дата возврата" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding ReturnDate}" Margin="0,0,0,20"/>
+
+                    <Button Content="Добавить" Command="{Binding AddCommand}" Margin="0,0,0,10"/>
+                    <Button Content="Отмена" Command="{Binding CancelCommand}"/>
+                </StackPanel>
+
+                <!-- Правая панель -->
+                <Border Grid.Column="1" BorderBrush="#495057" BorderThickness="1" CornerRadius="5" Padding="12">
+                    <TextBlock Text="{Binding Draft.Summary}" 
+                       FontSize="14" 
+                       TextWrapping="Wrap"
+                       Foreground="White"/>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
     </Window.Resources>
 
     <!-- Основной макет -->
@@ -263,6 +371,17 @@
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Аренды" 
                                        Style="{StaticResource Text_Style}" />
+                        </Grid>
+                    </Menu:Btn>
+
+                    <Menu:Btn Style="{StaticResource BtnStyle}"
+          Command="{Binding AddRentalsCommand}"
+          Click="NavigationButton_Click">
+                        <Grid>
+                            <Image Source="/Assets/img_order.png" 
+               Style="{StaticResource Image_Style}" />
+                            <TextBlock Text="Добавление аренды" 
+                   Style="{StaticResource Text_Style}" />
                         </Grid>
                     </Menu:Btn>
                 </StackPanel>

@@ -23,4 +23,11 @@ public partial class MainWindow : Window
     {
         Close();
     }
+    private void NavigationButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.Primitives.ToggleButton button)
+        {
+            button.IsChecked = true;
+        }
+    }
 }
