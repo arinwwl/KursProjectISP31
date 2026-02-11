@@ -34,6 +34,7 @@ namespace KursProjectISP31.ViewModel
             CarBrandsCommand = new RelayCommand(() => ShowView(new CarBrandsViewModel()));
             RentalsCommand = new RelayCommand(() => ShowView(new RentalsViewModel()));
 
+
             // Стартовая страница
             CurrentView = new HomeViewModel();
         }

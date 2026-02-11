@@ -2,105 +2,66 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace KursProjectISP31.Services
 {
-    public class RentalsService : BaseService<Rentals>
+    public class RentalService : BaseService<Rental>
     {
-        public RentalsService() : base() { }
-
-        public override bool Add(Rentals obj)
+        public RentalService() : base()
         {
-            bool isAdded = false;
+        }
 
-            // Валидация данных
-            if (obj.CarID <= 0) throw new ArgumentException("Не указан автомобиль для аренды");
-            if (obj.ClientID <= 0) throw new ArgumentException("Не указан клиент");
-            if (obj.RentalPeriod <= 0) throw new ArgumentException("Период аренды должен быть больше 0");
-
+        public override bool Add(Rental obj)
+        {
             try
             {
                 objSqlCommand.Parameters.Clear();
                 objSqlCommand.CommandText = "udp_InsertRental";
 
-                // Обязательные параметры
-                objSqlCommand.Parameters.AddWithValue("@IssueDate", obj.IssueDate);
-                objSqlCommand.Parameters.AddWithValue("@RentalPeriod", obj.RentalPeriod);
-                objSqlCommand.Parameters.AddWithValue("@CarID", obj.CarID);
-                objSqlCommand.Parameters.AddWithValue("@ClientID", obj.ClientID);
-                objSqlCommand.Parameters.AddWithValue("@RentalPrice", obj.RentalPrice);
-                objSqlCommand.Parameters.AddWithValue("@IsPaid", obj.IsPaid);
-                objSqlCommand.Parameters.AddWithValue("@EmployeeID", obj.EmployeeID);
-
-                // Необязательные параметры (могут быть NULL)
-                objSqlCommand.Parameters.AddWithValue("@ReturnDate", obj.ReturnDate == default(DateTime) ? (object)DBNull.Value : obj.ReturnDate);
-                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Services ?? (object)DBNull.Value);
-                
+                objSqlCommand.Parameters.Add("@IssueDate", System.Data.SqlDbType.Date).Value = obj.IssueDate;
+                objSqlCommand.Parameters.Add("@RentalPeriod", System.Data.SqlDbType.Int).Value = obj.RentalPeriod;
+                objSqlCommand.Parameters.Add("@ReturnDate", System.Data.SqlDbType.Date).Value = obj.ReturnDate ?? (object)DBNull.Value;
+                objSqlCommand.Parameters.Add("@CarID", System.Data.SqlDbType.Int).Value = obj.CarID;
+                objSqlCommand.Parameters.Add("@ClientID", System.Data.SqlDbType.Int).Value = obj.ClientID;
+                objSqlCommand.Parameters.Add("@Services", System.Data.SqlDbType.NVarChar).Value = obj.Services ?? (object)DBNull.Value;
+                objSqlCommand.Parameters.Add("@RentalPrice", System.Data.SqlDbType.Decimal).Value = obj.RentalPrice;
+                objSqlCommand.Parameters.Add("@IsPaid", System.Data.SqlDbType.Bit).Value = obj.IsPaid;
+                objSqlCommand.Parameters.Add("@EmployeeID", System.Data.SqlDbType.Int).Value = obj.EmployeeID;
 
                 objSqlconnection.Open();
-                isAdded = objSqlCommand.ExecuteNonQuery() > 0;
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Ошибка при добавлении аренды", ex);
+                int rowsAffected = objSqlCommand.ExecuteNonQuery();
+                return rowsAffected > 0;
             }
             finally
             {
                 if (objSqlconnection.State == System.Data.ConnectionState.Open)
                     objSqlconnection.Close();
             }
-
-            return isAdded;
         }
 
-        public override bool Update(Rentals obj)
+        public override bool Delete(int id)
         {
-            bool isUpdated = false;
-
-            // Валидация данных
-            if (obj.RentalID <= 0) throw new ArgumentException("Неверный ID аренды");
-            if (obj.RentalPeriod <= 0) throw new ArgumentException("Период аренды должен быть больше 0");
-
             try
             {
                 objSqlCommand.Parameters.Clear();
-                objSqlCommand.CommandText = "udp_UpdateRental";
-
-                // Обязательные параметры
-                objSqlCommand.Parameters.AddWithValue("@RentalID", obj.RentalID);
-                objSqlCommand.Parameters.AddWithValue("@IssueDate", obj.IssueDate);
-                objSqlCommand.Parameters.AddWithValue("@RentalPeriod", obj.RentalPeriod);
-                objSqlCommand.Parameters.AddWithValue("@CarID", obj.CarID);
-                objSqlCommand.Parameters.AddWithValue("@ClientID", obj.ClientID);
-                objSqlCommand.Parameters.AddWithValue("@RentalPrice", obj.RentalPrice);
-                objSqlCommand.Parameters.AddWithValue("@IsPaid", obj.IsPaid);
-                objSqlCommand.Parameters.AddWithValue("@EmployeeID", obj.EmployeeID);
-
-                // Необязательные параметры
-                objSqlCommand.Parameters.AddWithValue("@ReturnDate", obj.ReturnDate == default(DateTime) ? (object)DBNull.Value : obj.ReturnDate);
-                objSqlCommand.Parameters.AddWithValue("@Service1ID", obj.Services ?? (object)DBNull.Value);
-               
+                objSqlCommand.CommandText = "udp_DeleteRental";
+                objSqlCommand.Parameters.Add("@RentalID", System.Data.SqlDbType.Int).Value = id;
 
                 objSqlconnection.Open();
-                isUpdated = objSqlCommand.ExecuteNonQuery() > 0;
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Ошибка при обновлении аренды", ex);
+                int rowsAffected = objSqlCommand.ExecuteNonQuery();
+                return rowsAffected > 0;
             }
             finally
             {
                 if (objSqlconnection.State == System.Data.ConnectionState.Open)
                     objSqlconnection.Close();
             }
-
-            return isUpdated;
         }
 
-        public override List<Rentals> GetAll()
+        public override List<Rental> GetAll()
         {
-            List<Rentals> rentals = new List<Rentals>();
-
+            var list = new List<Rental>();
             try
             {
                 objSqlCommand.Parameters.Clear();
@@ -111,103 +72,58 @@ namespace KursProjectISP31.Services
                 {
                     while (reader.Read())
                     {
-                        rentals.Add(new Rentals
+                        var rental = new Rental
                         {
-                            RentalID = reader.GetInt32(reader.GetOrdinal("RentalID")),
-                            IssueDate = reader.GetDateTime(reader.GetOrdinal("IssueDate")),
-                            RentalPeriod = reader.GetInt32(reader.GetOrdinal("RentalPeriod")),
-                            ReturnDate = reader.IsDBNull(reader.GetOrdinal("ReturnDate")) ? default : reader.GetDateTime(reader.GetOrdinal("ReturnDate")),
-                            CarID = reader.GetInt32(reader.GetOrdinal("CarID")),
-                            ClientID = reader.GetInt32(reader.GetOrdinal("ClientID")),
-                            Services = reader.IsDBNull(reader.GetOrdinal("Services")) ? (string?)null : reader.GetString(reader.GetOrdinal("Services")),
-                            
-                            RentalPrice = reader.GetDecimal(reader.GetOrdinal("RentalPrice")),
-                            IsPaid = reader.GetBoolean(reader.GetOrdinal("IsPaid")),
-                            EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID"))
-                        });
+                            RentalID = reader.GetInt32("RentalID"),
+                            IssueDate = reader.GetDateTime("IssueDate"),
+                            RentalPeriod = reader.GetInt32("RentalPeriod"),
+                            ReturnDate = reader.IsDBNull("ReturnDate") ? null : reader.GetDateTime("ReturnDate"),
+                            CarID = reader.GetInt32("CarID"),
+                            ClientID = reader.GetInt32("ClientID"),
+                            Services = reader.IsDBNull("Services") ? string.Empty : reader.GetString("Services"),
+                            RentalPrice = reader.GetDecimal("RentalPrice"),
+                            IsPaid = reader.GetBoolean("IsPaid"),
+                            EmployeeID = reader.GetInt32("EmployeeID")
+                        };
+                        list.Add(rental);
                     }
                 }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Ошибка при получении списка аренд", ex);
+                return list;
             }
             finally
             {
                 if (objSqlconnection.State == System.Data.ConnectionState.Open)
                     objSqlconnection.Close();
             }
-
-            return rentals;
         }
 
-        public override bool Delete(int id)
+        public override bool Update(Rental obj)
         {
-            bool isDeleted = false;
-
             try
             {
                 objSqlCommand.Parameters.Clear();
-                objSqlCommand.CommandText = "udp_DeleteRental";
-                objSqlCommand.Parameters.AddWithValue("@RentalID", id);
+                objSqlCommand.CommandText = "udp_UpdateRental";
+
+                objSqlCommand.Parameters.Add("@RentalID", System.Data.SqlDbType.Int).Value = obj.RentalID;
+                objSqlCommand.Parameters.Add("@IssueDate", System.Data.SqlDbType.Date).Value = obj.IssueDate;
+                objSqlCommand.Parameters.Add("@RentalPeriod", System.Data.SqlDbType.Int).Value = obj.RentalPeriod;
+                objSqlCommand.Parameters.Add("@ReturnDate", System.Data.SqlDbType.Date).Value = obj.ReturnDate ?? (object)DBNull.Value;
+                objSqlCommand.Parameters.Add("@CarID", System.Data.SqlDbType.Int).Value = obj.CarID;
+                objSqlCommand.Parameters.Add("@ClientID", System.Data.SqlDbType.Int).Value = obj.ClientID;
+                objSqlCommand.Parameters.Add("@Services", System.Data.SqlDbType.NVarChar).Value = obj.Services ?? (object)DBNull.Value;
+                objSqlCommand.Parameters.Add("@RentalPrice", System.Data.SqlDbType.Decimal).Value = obj.RentalPrice;
+                objSqlCommand.Parameters.Add("@IsPaid", System.Data.SqlDbType.Bit).Value = obj.IsPaid;
+                objSqlCommand.Parameters.Add("@EmployeeID", System.Data.SqlDbType.Int).Value = obj.EmployeeID;
 
                 objSqlconnection.Open();
-                isDeleted = objSqlCommand.ExecuteNonQuery() > 0;
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Ошибка при удалении аренды", ex);
+                int rowsAffected = objSqlCommand.ExecuteNonQuery();
+                return rowsAffected > 0;
             }
             finally
             {
                 if (objSqlconnection.State == System.Data.ConnectionState.Open)
                     objSqlconnection.Close();
             }
-
-            return isDeleted;
-        }
-
-        public List<Rentals> GetActiveRentals()
-        {
-            List<Rentals> activeRentals = new List<Rentals>();
-
-            try
-            {
-                objSqlCommand.Parameters.Clear();
-                objSqlCommand.CommandText = "udp_GetActiveRentals";
-                objSqlconnection.Open();
-
-                using (var reader = objSqlCommand.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        activeRentals.Add(new Rentals
-                        {
-                            RentalID = reader.GetInt32(reader.GetOrdinal("RentalID")),
-                            IssueDate = reader.GetDateTime(reader.GetOrdinal("IssueDate")),
-                            RentalPeriod = reader.GetInt32(reader.GetOrdinal("RentalPeriod")),
-                            ReturnDate = reader.IsDBNull(reader.GetOrdinal("ReturnDate")) ? default : reader.GetDateTime(reader.GetOrdinal("ReturnDate")),
-                            CarID = reader.GetInt32(reader.GetOrdinal("CarID")),
-                            ClientID = reader.GetInt32(reader.GetOrdinal("ClientID")),
-                            Services = reader.IsDBNull(reader.GetOrdinal("Services")) ? (string?)null : reader.GetString(reader.GetOrdinal("Service1ID")),
-                            RentalPrice = reader.GetDecimal(reader.GetOrdinal("RentalPrice")),
-                            IsPaid = reader.GetBoolean(reader.GetOrdinal("IsPaid")),
-                            EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID"))
-                        });
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Ошибка при получении активных аренд", ex);
-            }
-            finally
-            {
-                if (objSqlconnection.State == System.Data.ConnectionState.Open)
-                    objSqlconnection.Close();
-            }
-
-            return activeRentals;
         }
     }
 }

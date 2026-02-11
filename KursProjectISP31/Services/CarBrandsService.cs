@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace KursProjectISP31.Services
 {
-    public class CarBrandsService : BaseService<CarBrands>
+    public class CarBrandsService : BaseService<CarBrand>
     {
         public CarBrandsService() : base()
         {
         }
 
-        public override bool Add(CarBrands obj)
+        public override bool Add(CarBrand obj)
         {
             bool IsAdded = false;
             try
@@ -63,9 +63,9 @@ namespace KursProjectISP31.Services
             return IsDeleted;
         }
 
-        public override List<CarBrands> GetAll()
+        public override List<CarBrand> GetAll()
         {
-            List<CarBrands> list = new List<CarBrands>();
+            List<CarBrand> list = new List<CarBrand>();
             try
             {
                 objSqlCommand.Parameters.Clear();
@@ -74,10 +74,10 @@ namespace KursProjectISP31.Services
                 var ObjSqlDataReader = objSqlCommand.ExecuteReader();
                 if (ObjSqlDataReader.HasRows)
                 {
-                    CarBrands objBrand = null;
+                    CarBrand objBrand = null;
                     while (ObjSqlDataReader.Read())
                     {
-                        objBrand = new CarBrands();
+                        objBrand = new CarBrand();
                         objBrand.BrandID = ObjSqlDataReader.GetInt32(0);
                         objBrand.BrandName = ObjSqlDataReader.GetString(1);
                         objBrand.TechnicalSpecs = ObjSqlDataReader.IsDBNull(2) ? null : ObjSqlDataReader.GetString(2);
@@ -98,7 +98,7 @@ namespace KursProjectISP31.Services
             return list;
         }
 
-        public override bool Update(CarBrands obj)
+        public override bool Update(CarBrand obj)
         {
             bool IsUpdate = false;
             try

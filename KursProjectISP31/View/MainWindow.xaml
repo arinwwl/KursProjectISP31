@@ -117,6 +117,72 @@
             </Grid>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:CarBrandsViewModel}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Бренды автомобилей" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Brands}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID бренда" Binding="{Binding BrandID}" Width="90"/>
+                        <DataGridTextColumn Header="Название бренда" Binding="{Binding BrandName}" Width="180"/>
+                        <DataGridTextColumn Header="Технические характеристики" 
+                                    Binding="{Binding TechnicalSpecs}" 
+                                    Width="250"/>
+                        <DataGridTextColumn Header="Описание" 
+                                    Binding="{Binding Description}" 
+                                    Width="300"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:RentalsViewModel}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Аренды" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Rentals}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID аренды" Binding="{Binding RentalID}" Width="90"/>
+                        <DataGridTextColumn Header="Дата выдачи" 
+                                    Binding="{Binding IssueDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                    Width="100"/>
+                        <DataGridTextColumn Header="Срок (дней)" Binding="{Binding RentalPeriod}" Width="90"/>
+                        <DataGridTextColumn Header="Дата возврата" 
+                                    Binding="{Binding ReturnDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                    Width="100"/>
+                        <DataGridTextColumn Header="ID авто" Binding="{Binding CarID}" Width="80"/>
+                        <DataGridTextColumn Header="ID клиента" Binding="{Binding ClientID}" Width="100"/>
+                        <DataGridTextColumn Header="Услуги" Binding="{Binding Services}" Width="200"/>
+                        <DataGridTextColumn Header="Стоимость" 
+                                    Binding="{Binding RentalPrice, StringFormat={}{0:C}}" 
+                                    Width="100"/>
+                        <DataGridCheckBoxColumn Header="Оплачено" Binding="{Binding IsPaid}" Width="80"/>
+                        <DataGridTextColumn Header="ID сотрудника" Binding="{Binding EmployeeID}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+
     </Window.Resources>
 
     <!-- Основной макет -->

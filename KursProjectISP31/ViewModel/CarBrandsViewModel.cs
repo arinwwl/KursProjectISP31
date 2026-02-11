@@ -1,13 +1,27 @@
-﻿using KursProjectISP31.Utills;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using KursProjectISP31.Model;
+using KursProjectISP31.Utills;
+using System.Collections.ObjectModel;
 
 namespace KursProjectISP31.ViewModel
 {
-    internal class CarBrandsViewModel: ViewModelBase
+    public class CarBrandsViewModel : ViewModelBase
     {
+        private ObservableCollection<CarBrand> _brands = new();
+
+        public ObservableCollection<CarBrand> Brands
+        {
+            get => _brands;
+            set
+            {
+                _brands = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CarBrandsViewModel()
+        {
+            // Данные будут загружены позже из сервиса
+        }
     }
 }
